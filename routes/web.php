@@ -2,6 +2,9 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\AboutController;
+use App\Http\Controllers\PostController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,11 +25,33 @@ use Illuminate\Support\Facades\Route;
 // 	return view('home.contact');
 // })->name('home.contact');
 
-Route::view('/', 'home.index')
-	->name('home.index');
+Route::get('/', [HomeController::class, 'home'])->name('home.index');
+Route::get('/contact', [HomeController::class, 'contact'])->name('home.contact');
 
-Route::view('/contact', 'home.contact')
-	->name('home.contact');
+Route::get('/single', AboutController::class);
+
+Route::resource('posts', PostController::class)
+	->only(['index', 'show', 'create', 'store', 'edit', 'update', 'destroy']);
+
+// Route::get('/posts', function () use ($posts) {
+// 	// dd(request()->all());
+// 	dd((int)request()->input('limit', 1));
+// 	return view('posts.index', ['posts' => $posts]);
+// })->name('posts.index');
+
+
+// Route::get('/posts/{id}', function ($id) use ($posts) {
+// 	abort_if(!isset($posts[$id]), 404);
+// 	return view('posts.show', ['post' => $posts[$id]]);
+// })
+// // ->where([
+// // 	// 'id' => '[0-9]+' // Verifies that is is a number.
+// // ])
+// ->name('posts.show');
+
+// Route::get('/recent-posts/{days_ago?}', function ($daysAgo = 20) {
+// 	return "Posts from " . $daysAgo . " days ago.";
+// })->name('posts.recent.index');
 
 $posts = [
 	1 => [
@@ -46,27 +71,6 @@ $posts = [
 			'is_new' => false
 	]
 ];
-
-Route::get('/posts', function () use ($posts) {
-	// dd(request()->all());
-	dd((int)request()->input('limit', 1));
-	return view('posts.index', ['posts' => $posts]);
-})->name('posts.index');
-
-
-Route::get('/posts/{id}', function ($id) use ($posts) {
-	abort_if(!isset($posts[$id]), 404);
-	return view('posts.show', ['post' => $posts[$id]]);
-})
-// ->where([
-// 	// 'id' => '[0-9]+' // Verifies that is is a number.
-// ])
-->name('posts.show');
-
-Route::get('/recent-posts/{days_ago?}', function ($daysAgo = 20) {
-	return "Posts from " . $daysAgo . " days ago.";
-})->name('posts.recent.index');
-
 
 Route::prefix('/fun')->name('fun.')->group(function() use ($posts) {
 
@@ -103,3 +107,7 @@ Route::prefix('/fun')->name('fun.')->group(function() use ($posts) {
 });
 
 
+
+Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
+    return view('dashboard');
+})->name('dashboard');
