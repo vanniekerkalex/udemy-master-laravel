@@ -33,6 +33,8 @@ Route::get('/single', AboutController::class);
 Route::resource('posts', PostController::class)
 	->only(['index', 'show', 'create', 'store', 'edit', 'update', 'destroy']);
 
+Auth::routes();
+
 // Route::get('/posts', function () use ($posts) {
 // 	// dd(request()->all());
 // 	dd((int)request()->input('limit', 1));
@@ -53,58 +55,58 @@ Route::resource('posts', PostController::class)
 // 	return "Posts from " . $daysAgo . " days ago.";
 // })->name('posts.recent.index');
 
-$posts = [
-	1 => [
-			'title' => 'Intro to Laravel',
-			'content' => 'This is a short intro to Laravel',
-			'is_new' => true,
-			'has_comments' => true
-	],
-	2 => [
-			'title' => 'Intro to PHP',
-			'content' => 'This is a short intro to PHP',
-			'is_new' => false
-	],
-	3 => [
-			'title' => 'Intro to Golang',
-			'content' => 'This is a short intro to Golang',
-			'is_new' => false
-	]
-];
+// $posts = [
+// 	1 => [
+// 			'title' => 'Intro to Laravel',
+// 			'content' => 'This is a short intro to Laravel',
+// 			'is_new' => true,
+// 			'has_comments' => true
+// 	],
+// 	2 => [
+// 			'title' => 'Intro to PHP',
+// 			'content' => 'This is a short intro to PHP',
+// 			'is_new' => false
+// 	],
+// 	3 => [
+// 			'title' => 'Intro to Golang',
+// 			'content' => 'This is a short intro to Golang',
+// 			'is_new' => false
+// 	]
+// ];
 
-Route::prefix('/fun')->name('fun.')->group(function() use ($posts) {
+// Route::prefix('/fun')->name('fun.')->group(function() use ($posts) {
 
-	Route::get('responses', function() use ($posts){
-		return response($posts, 201)
-			->header('Content-Type', 'application/json')
-			->cookie('MY_COOKIE', 'Alex van Niekerk', 3600);
-	})->name('responses');
+// 	Route::get('responses', function() use ($posts){
+// 		return response($posts, 201)
+// 			->header('Content-Type', 'application/json')
+// 			->cookie('MY_COOKIE', 'Alex van Niekerk', 3600);
+// 	})->name('responses');
 	
-	Route::get('redirect', function() {
-		return redirect('/contact');
-	})->name('redirect');
+// 	Route::get('redirect', function() {
+// 		return redirect('/contact');
+// 	})->name('redirect');
 	
-	Route::get('back', function() {
-		return back();
-	})->name('back');
+// 	Route::get('back', function() {
+// 		return back();
+// 	})->name('back');
 	
-	Route::get('named-route', function() {
-		return redirect()->route('posts.show', ['id' => 1]);
-	})->name('named-route');
+// 	Route::get('named-route', function() {
+// 		return redirect()->route('posts.show', ['id' => 1]);
+// 	})->name('named-route');
 	
-	Route::get('away', function() {
-		return redirect()->away('http://google.com/');
-	})->name('away');
+// 	Route::get('away', function() {
+// 		return redirect()->away('http://google.com/');
+// 	})->name('away');
 	
-	Route::get('json', function() use ($posts) {
-		return response()->json($posts);
-	})->name('json');
+// 	Route::get('json', function() use ($posts) {
+// 		return response()->json($posts);
+// 	})->name('json');
 	
-	Route::get('download', function() use ($posts) {
-		return response()->download(public_path('/daniel.jpg'), 'face.jpg');
-	})->name('download');
+// 	Route::get('download', function() use ($posts) {
+// 		return response()->download(public_path('/daniel.jpg'), 'face.jpg');
+// 	})->name('download');
 
-});
+// });
 
 
 
